@@ -1,0 +1,9 @@
+PROJECT_NAME = Simple_3DViewer
+PROJECT_NUMBER = 1
+PROJECT_BRIEF = "My education project to view 3d files"
+
+OUTPUT_DIRECTORY = doc/
+
+INPUT = back_c/ ctrl_c/ view/
+
+RECURSIVE = YES
