@@ -27,7 +27,7 @@ add_executable(simple_3d_viewer ${PROJECT_SOURCES})
 add_subdirectory(3rdparty/giflib)
 
 # Подключаем giflib к нашему проекту
-target_include_directories(simple_3d_viewer PRIVATE ${CMAKE_SOURCE_DIR}/3rdparty/giflib)
+#target_include_directories(simple_3d_viewer PRIVATE ${CMAKE_SOURCE_DIR}/3rdparty/giflib)
 target_link_libraries(simple_3d_viewer PRIVATE giflib)
 
 set(OBJECT_LIB_PATH "${CMAKE_SOURCE_DIR}/resources/object.a")
