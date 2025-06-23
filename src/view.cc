@@ -1,7 +1,5 @@
 #include "view.h"
 
-#include <gif_lib.h>
-
 #include <QComboBox>
 #include <QDebug>
 #include <QMessageBox>
@@ -30,6 +28,7 @@ View::View(QWidget* parent) : QMainWindow(parent), ui(new Ui::View) {
   ui->setupUi(this);
   namespace fs = std::filesystem;
   std::string path = getExecutablePath() + "/obj/";
+  if (!fs::exists(path)) fs::create_directory(path);
   for (const auto& entry : fs::directory_iterator(path)) {
     std::string temp = entry.path().string();
     QString temp2 = QString::fromStdString(temp);
