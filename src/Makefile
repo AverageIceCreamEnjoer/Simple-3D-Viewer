@@ -5,7 +5,7 @@ INSTALL_DIR = install
 CC := gcc
 CFLAGS := -std=c11 -Wall -Werror -Wextra
 PROJECT_NAME := C8_3DViewer_v1.0-2
-TEST_SRC = back_c/matrix/* back_c/*
+TEST_SRC = back_c/matrix_c/* back_c/*
 TEST_SOURCES = test/test.c $(TEST_SRC)
 
 
@@ -16,7 +16,7 @@ res:
 	mkdir -p $(RES_DIR)
 
 object.a: res
-	$(CC) $(CFLAGS) -c back_c/matrix/*.c back_c/*.c
+	$(CC) $(CFLAGS) -c back_c/matrix_c/*.c back_c/*.c
 	mv *.o $(RES_DIR)/
 	ar rcs object.a $(RES_DIR)/*.o
 	ranlib object.a
@@ -28,11 +28,11 @@ install: uninstall object.a
 	cd $(BUILD_DIR) && cmake ../ && make
 	cd $(BUILD_DIR) && touch models.txt
 	mkdir -p $(INSTALL_DIR)
-	mv $(BUILD_DIR)/3d_viewer $(INSTALL_DIR)
+	mv $(BUILD_DIR)/simple_3d_viewer $(INSTALL_DIR)
 ifeq ($(shell uname), Linux)
 	chmod 0700 /run/user/1000 
 endif
-	./$(INSTALL_DIR)/3d_viewer
+	./$(INSTALL_DIR)/simple_3d_viewer
 
 clean:
 	rm -rf $(DOC_DIR) $(RES_DIR) $(BUILD_DIR) coverage_report *.o *.a 3d_viewer tests
@@ -53,11 +53,11 @@ tests: clean object.a
 
 clang:
 	 cp ../materials/linters/.clang-format ./
-	 clang-format -i *.h *.cc view/* ctrl_c/* back_c/*.c back_c/*.h back_c/matrix/*.c back_c/matrix/*.h
+	 clang-format -i *.h *.cc view/* ctrl_c/* back_c/*.c back_c/*.h back_c/matrix_c/*.c back_c/matrix_c/*.h
 	 rm .clang-format
 
 gcov_report: clean res
-	$(CC) $(CFLAGS) --coverage -c back_c/matrix/*.c back_c/*.c
+	$(CC) $(CFLAGS) --coverage -c back_c/matrix_c/*.c back_c/*.c
 	mv *.o $(RES_DIR)/
 	ar rcs object.a $(RES_DIR)/*.o
 	ranlib object.a
