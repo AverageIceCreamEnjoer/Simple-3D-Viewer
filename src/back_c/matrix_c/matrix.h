@@ -1,5 +1,4 @@
-#ifndef _MATRIX_H_
-#define _MATRIX_H_
+#pragma once
 
 #include <math.h>
 #include <stdio.h>
@@ -19,5 +18,3 @@ int check_matrix(matrix_t *a);
 int create_matrix(int rows, int columns, matrix_t *result);
 void remove_matrix(matrix_t *A);
 int mult_num(matrix_t *A, float number);
-
-#endif

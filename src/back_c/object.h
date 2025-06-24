@@ -1,5 +1,4 @@
-#ifndef __OBJECT_H__
-#define __OBJECT_H__
+#pragma once
 
 #include <math.h>
 #include <stdbool.h>
@@ -31,5 +30,3 @@ void rotateX(Object* obj, float angleX);
 void rotateY(Object* obj, float angleY);
 void rotateZ(Object* obj, float angleZ);
 void translate(Object* obj, float x, float y, float z);
-
-#endif  // __OBJECT_H__

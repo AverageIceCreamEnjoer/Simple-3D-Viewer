@@ -1,5 +1,4 @@
-#ifndef __GLVIEW_H__
-#define __GLVIEW_H__
+#pragma once
 
 #include <QtOpenGL>
 #include <QtOpenGLWidgets>
@@ -174,5 +173,3 @@ class GLView : public QOpenGLWidget {
   void setRotation(float x, float y, float z);
 };
 }  // namespace viewer
-
-#endif

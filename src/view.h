@@ -1,5 +1,4 @@
-#ifndef _3D_VIEWER_VIEW_H_
-#define _3D_VIEWER_VIEW_H_
+#pragma once
 
 #include <QDebug>
 #include <QDir>
@@ -12,7 +11,7 @@
 #include <QSettings>
 #include <QTimer>
 
-#include "gif_lib.h"
+#include "3rdparty/giflib/gif_lib.h"
 #include "main.h"
 
 QT_BEGIN_NAMESPACE
@@ -73,4 +72,3 @@ class View : public QMainWindow {
   int max_frames_ = 50;
 };
 }  // namespace viewer
-#endif  // MAINWINDOW_H

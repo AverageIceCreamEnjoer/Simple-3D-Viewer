@@ -1,5 +1,4 @@
-#ifndef __CONTROLLER_H__
-#define __CONTROLLER_H__
+#pragma once
 
 #include <string>
 
@@ -81,5 +80,3 @@ class Controller {
   void loadBuffer(float* vertex_buffer, float* edge_buffer, bool load);
 };
 }  // namespace viewer
-
-#endif
