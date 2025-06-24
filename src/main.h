@@ -1,5 +1,4 @@
-#ifndef _3D_VIEWER_MAIN_H_
-#define _3D_VIEWER_MAIN_H_
+#pragma once
 
 #include <QApplication>
 #include <QCoreApplication>
@@ -159,4 +158,3 @@ class TestQt : public QWidget {
   }
 };
 }  // namespace viewer
-#endif

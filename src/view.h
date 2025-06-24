@@ -1,5 +1,4 @@
-#ifndef _3D_VIEWER_VIEW_H_
-#define _3D_VIEWER_VIEW_H_
+#pragma once
 
 #include <QDebug>
 #include <QDir>
@@ -73,4 +72,3 @@ class View : public QMainWindow {
   int max_frames_ = 50;
 };
 }  // namespace viewer
-#endif  // _3D_VIEWER_VIEW_H_

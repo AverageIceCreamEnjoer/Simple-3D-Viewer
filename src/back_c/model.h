@@ -1,5 +1,4 @@
-#ifndef __MODEL_H__
-#define __MODEL_H__
+#pragma once
 
 #include <string.h>
 
@@ -33,5 +32,3 @@ void Model_getBufSize(Model* model, unsigned int* ver_buf_size,
                       unsigned int* edge_buf_size);
 void Model_loadBuffer(Model* model, float* vertex_buffer, float* edge_buffer,
                       bool load);
-
-#endif
