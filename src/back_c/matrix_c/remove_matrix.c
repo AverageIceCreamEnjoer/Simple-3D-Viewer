@@ -1,14 +1,14 @@
 #include "matrix.h"
 
-void remove_matrix(matrix_t *A) {
-  if (A) {
-    if (A->matrix) {
-      for (int i = 0; i < A->rows; i++) {
-        if (A->matrix[i]) free(A->matrix[i]);
+void RemoveMatrix(Matrix *a) {
+  if (a) {
+    if (a->matrix) {
+      for (int i = 0; i < a->rows; i++) {
+        if (a->matrix[i]) free(a->matrix[i]);
       }
-      free(A->matrix);
+      free(a->matrix);
     }
-    A->rows = 0;
-    A->columns = 0;
+    a->rows = 0;
+    a->columns = 0;
   }
 }

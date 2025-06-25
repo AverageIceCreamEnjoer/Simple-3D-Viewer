@@ -8,13 +8,13 @@
 #define ERR_MATRIX 1
 #define ERR_CALC 2
 
-typedef struct matrix_struct {
+typedef struct MatrixType {
   float **matrix;
   int rows;
   int columns;
-} matrix_t;
+} Matrix;
 
-int check_matrix(matrix_t *a);
-int create_matrix(int rows, int columns, matrix_t *result);
-void remove_matrix(matrix_t *A);
-int mult_num(matrix_t *A, float number);
+int CheckMatrix(Matrix *a);
+int CreateMatrix(int rows, int columns, Matrix *result);
+void RemoveMatrix(Matrix *a);
+int MultNum(Matrix *a, float number);
