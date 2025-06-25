@@ -3,53 +3,53 @@
 #include <iostream>
 namespace viewer {
 
-Controller::Controller() { _model = ModelCreate(); }
+Controller::Controller() { model_ = ModelCreate(); }
 
-Controller::~Controller() { ModelDestroy(_model); }
+Controller::~Controller() { ModelDestroy(model_); }
 
-const std::string Controller::getFilePath() const {
-  return std::string(ModelGetFilePath(_model));
+const std::string Controller::GetFilePath() const {
+  return std::string(ModelGetFilePath(model_));
 }
 
-void Controller::transformObject(int operation, double value) {
-  ModelTransform(_model, operation, value);
+void Controller::TransformObject(int operation, double value) {
+  ModelTransform(model_, operation, value);
 }
 
-double Controller::getScale() const { return ModelGetScale(_model); }
+double Controller::GetScale() const { return ModelGetScale(model_); }
 
-unsigned int Controller::getNumberVertex() const {
-  return ModelGetNumberVertex(_model);
+unsigned int Controller::GetNumberVertex() const {
+  return ModelGetNumberVertex(model_);
 }
 
-unsigned int Controller::getNumberFace() const {
-  return ModelGetNumberFace(_model);
+unsigned int Controller::GetNumberFace() const {
+  return ModelGetNumberFace(model_);
 }
 
-unsigned int Controller::getFaceSize(unsigned int index) const {
-  return ModelGetFaceSize(_model, index);
+unsigned int Controller::GetFaceSize(unsigned int index) const {
+  return ModelGetFaceSize(model_, index);
 }
 
-void Controller::toNormal() { ModelToNormal(_model); }
+void Controller::ToNormal() { ModelToNormal(model_); }
 
-bool Controller::setObject(const std::string& filePath) {
-  return ModelSetObject(_model, filePath.data());
+bool Controller::SetObject(const std::string& filePath) {
+  return ModelSetObject(model_, filePath.data());
 }
 
-float Controller::getVertex(int row, int col) const {
-  return ModelGetVertex(_model, row, col);
+float Controller::GetVertex(int row, int col) const {
+  return ModelGetVertex(model_, row, col);
 }
 
-bool Controller::isSetted() const { return _model->setted; }
+bool Controller::IsSetted() const { return model_->setted; }
 
-std::pair<unsigned int, unsigned int> Controller::getBufSize() {
+std::pair<unsigned int, unsigned int> Controller::GetBufSize() {
   std::pair<unsigned int, unsigned int> res(0, 0);
-  ModelGetBufSize(_model, &res.first, &res.second);
+  ModelGetBufSize(model_, &res.first, &res.second);
   return res;
 }
 
-void Controller::loadBuffer(float* vertex_buffer, float* edge_buffer,
+void Controller::LoadBuffer(float* vertex_buffer, float* edge_buffer,
                             bool load) {
-  return ModelLoadBuffer(_model, vertex_buffer, edge_buffer, load);
+  return ModelLoadBuffer(model_, vertex_buffer, edge_buffer, load);
 }
 
 }  // namespace viewer

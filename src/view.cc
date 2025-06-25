@@ -11,23 +11,23 @@
 
 namespace viewer {
 
-std::string getExecutablePath() {
+std::string GetExecutablePath() {
   // Получаем путь к исполняемому файлу
-  QString exePath = QCoreApplication::applicationFilePath();
+  QString exe_path = QCoreApplication::applicationFilePath();
 
   // Получаем директорию исполняемого файла
-  QDir exeDir = QFileInfo(exePath).absoluteDir();
-  std::string path = exeDir.absolutePath().toStdString();
-  std::string toRemove = "/install";
-  if (path.find(toRemove) != std::string::npos)
-    path.erase(path.find(toRemove), toRemove.length());
+  QDir exe_dir = QFileInfo(exe_path).absoluteDir();
+  std::string path = exe_dir.absolutePath().toStdString();
+  std::string to_remove = "/install";
+  if (path.find(to_remove) != std::string::npos)
+    path.erase(path.find(to_remove), to_remove.length());
   return path;
 }
 
 View::View(QWidget* parent) : QMainWindow(parent), ui(new Ui::View) {
   ui->setupUi(this);
   namespace fs = std::filesystem;
-  std::string path = getExecutablePath() + "/obj/";
+  std::string path = GetExecutablePath() + "/obj/";
   if (!fs::exists(path)) fs::create_directory(path);
   for (const auto& entry : fs::directory_iterator(path)) {
     std::string temp = entry.path().string();
@@ -54,8 +54,8 @@ View::View(QWidget* parent) : QMainWindow(parent), ui(new Ui::View) {
 
 View::~View() { delete ui; }
 
-void View::write_to_file() {
-  std::ofstream out(getExecutablePath() + "/build/models.txt",
+void View::WriteToFile() {
+  std::ofstream out(GetExecutablePath() + "/build/models.txt",
                     std::ios_base::out);
   out << projection << "\n";
   out << edge_type << "\n";
@@ -68,84 +68,84 @@ void View::write_to_file() {
   out.close();
 }
 
-void View::change_colors() {
+void View::ChangeColors() {
   std::string color = ui->comboBox_3->currentText().toStdString();
   if (color == "blue") {
-    win.edge_color(0, 0, 128);
+    win.EdgeColor(0, 0, 128);
     edge_color = 1;
   } else if (color == "red") {
-    win.edge_color(128, 0, 0);
+    win.EdgeColor(128, 0, 0);
     edge_color = 2;
   } else if (color == "yellow") {
-    win.edge_color(255, 255, 0);
+    win.EdgeColor(255, 255, 0);
     edge_color = 3;
   } else if (color == "black") {
-    win.edge_color(0, 0, 0);
+    win.EdgeColor(0, 0, 0);
     edge_color = 4;
   } else {
-    win.edge_color(0, 128, 0);
+    win.EdgeColor(0, 128, 0);
     edge_color = 0;
   }
   color = ui->comboBox_2->currentText().toStdString();
   if (color == "blue") {
-    win.vertex_color(0, 0, 128);
+    win.VertexColor(0, 0, 128);
     v_color = 1;
   } else if (color == "red") {
-    win.vertex_color(128, 0, 0);
+    win.VertexColor(128, 0, 0);
     v_color = 2;
   } else if (color == "yellow") {
-    win.vertex_color(255, 255, 0);
+    win.VertexColor(255, 255, 0);
     v_color = 3;
   } else if (color == "black") {
-    win.vertex_color(0, 0, 0);
+    win.VertexColor(0, 0, 0);
     v_color = 4;
   } else {
-    win.vertex_color(0, 128, 0);
+    win.VertexColor(0, 128, 0);
     v_color = 0;
   }
   color = ui->comboBox_4->currentText().toStdString();
   if (color == "blue") {
-    win.field_color(0, 0, 128);
+    win.FieldColor(0, 0, 128);
     field_color = 1;
   } else if (color == "red") {
-    win.field_color(128, 0, 0);
+    win.FieldColor(128, 0, 0);
     field_color = 2;
   } else if (color == "yellow") {
     field_color = 3;
-    win.field_color(255, 255, 0);
+    win.FieldColor(255, 255, 0);
   } else if (color == "black") {
     field_color = 4;
-    win.field_color(0, 0, 0);
+    win.FieldColor(0, 0, 0);
   } else {
     field_color = 0;
-    win.field_color(71, 72, 74);
+    win.FieldColor(71, 72, 74);
   }
 }
 
-void View::changes_from_file() {
+void View::ChangesFromFile() {
   std::string from_conf;
-  std::ifstream in(getExecutablePath() + "/build/models.txt");
+  std::ifstream in(GetExecutablePath() + "/build/models.txt");
   if (std::getline(in, from_conf) && check_file_conf) {
     if (std::stoi(from_conf) == 1) {
-      win.central_proj();
+      win.CentralProj();
       projection = 1;
     } else {
-      win.parallel_proj();
+      win.ParallelProj();
       projection = 0;
     }
 
     std::getline(in, from_conf);
     if (std::stoi(from_conf) == 0) {
-      win.EdgeMode_false();
+      win.EdgeModeFalse();
       edge_type = 0;
     } else {
-      win.EdgeMode_true();
+      win.EdgeModeTrue();
       edge_type = 1;
     }
 
     std::getline(in, from_conf);
     ui->horizontalSlider_2->setValue(std::stoi(from_conf));
-    win.edge_size(std::stoi(from_conf));
+    win.EdgeSize(std::stoi(from_conf));
     edge_th = std::stoi(from_conf);
 
     std::getline(in, from_conf);
@@ -154,7 +154,7 @@ void View::changes_from_file() {
 
     std::getline(in, from_conf);
     v_type = std::stoi(from_conf);
-    win.vertex_mode(std::stoi(from_conf));
+    win.VertexMode(std::stoi(from_conf));
 
     std::getline(in, from_conf);
     ui->comboBox_2->setCurrentIndex(std::stoi(from_conf));
@@ -162,30 +162,30 @@ void View::changes_from_file() {
 
     std::getline(in, from_conf);
     ui->horizontalSlider->setValue(std::stoi(from_conf));
-    win.vertex_size(std::stoi(from_conf));
+    win.VertexSize(std::stoi(from_conf));
     v_th = std::stoi(from_conf);
 
     std::getline(in, from_conf);
     ui->comboBox_4->setCurrentIndex(std::stoi(from_conf));
     field_color = std::stoi(from_conf);
   }
-  change_colors();
+  ChangeColors();
   in.close();
 }
 
 void View::on_pushButton_14_clicked() {
-  std::string path = getExecutablePath() + "/obj/";
+  std::string path = GetExecutablePath() + "/obj/";
   bool check_file = false;
   QString obj = ui->textEdit->toPlainText();
   if (!((obj.toStdString()).empty())) {
     std::ifstream file(obj.toStdString());
     if (file.is_open() && obj.endsWith(".obj")) {
-      check_file = win.change_obj(obj.toStdString());
+      check_file = win.ChangeObj(obj.toStdString());
       if (check_file) {
         std::string info = "Model name: " + obj.toStdString() + "\n" +
-                           "Number vertex: " + std::to_string(win.getVertex()) +
+                           "Number vertex: " + std::to_string(win.GetVertex()) +
                            "\n" +
-                           "Number edges: " + std::to_string(win.getFace());
+                           "Number edges: " + std::to_string(win.GetFace());
         ui->textBrowser->setText(QString::fromStdString(info));
       }
     } else {
@@ -194,12 +194,12 @@ void View::on_pushButton_14_clicked() {
       if (file.is_open() &&
           !((ui->comboBox->currentText().toStdString()).empty()) &&
           ui->comboBox->currentText().endsWith(".obj")) {
-        check_file = win.change_obj(ui->comboBox->currentText().toStdString());
+        check_file = win.ChangeObj(ui->comboBox->currentText().toStdString());
         if (check_file) {
           std::string info =
               "Model name: " + ui->comboBox->currentText().toStdString() +
-              "\n" + "Number vertex: " + std::to_string(win.getVertex()) +
-              "\n" + "Number edges: " + std::to_string(win.getFace());
+              "\n" + "Number vertex: " + std::to_string(win.GetVertex()) +
+              "\n" + "Number edges: " + std::to_string(win.GetFace());
           ui->textBrowser->setText(QString::fromStdString(info));
         }
       } else {
@@ -213,12 +213,12 @@ void View::on_pushButton_14_clicked() {
     if (file.is_open() &&
         !((ui->comboBox->currentText().toStdString()).empty()) &&
         ui->comboBox->currentText().endsWith(".obj")) {
-      check_file = win.change_obj(ui->comboBox->currentText().toStdString());
+      check_file = win.ChangeObj(ui->comboBox->currentText().toStdString());
       if (check_file) {
         std::string info =
             "Model name: " + ui->comboBox->currentText().toStdString() + "\n" +
-            "Number vertex: " + std::to_string(win.getVertex()) + "\n" +
-            "Number edges: " + std::to_string(win.getFace());
+            "Number vertex: " + std::to_string(win.GetVertex()) + "\n" +
+            "Number edges: " + std::to_string(win.GetFace());
         ui->textBrowser->setText(QString::fromStdString(info));
       }
     } else {
@@ -227,9 +227,9 @@ void View::on_pushButton_14_clicked() {
     }
   }
   if (check_file) {
-    changes_from_file();
+    ChangesFromFile();
   } else {
-    change_colors();
+    ChangeColors();
     x_value = 0, y_value = 0, z_value = 0, scale_value = 50, x_rotate_value = 0,
     y_rotate_value = 0, z_rotate_value = 0;
   }
@@ -241,117 +241,117 @@ void View::on_pushButton_14_clicked() {
   ui->horizontalSlider_7->setValue(50);
   ui->horizontalSlider_8->setValue(50);
   ui->horizontalSlider_9->setValue(50);
-  write_to_file();
+  WriteToFile();
   check_file_conf = false;
-  win.update_view();
+  win.UpdateView();
 }
 
 void View::on_pushButton_7_clicked() {
-  win.parallel_proj();
+  win.ParallelProj();
   projection = 0;
-  write_to_file();
+  WriteToFile();
 }
 
 void View::on_pushButton_8_clicked() {
-  win.central_proj();
+  win.CentralProj();
   projection = 1;
-  write_to_file();
+  WriteToFile();
 }
 
 void View::on_pushButton_9_clicked() {
-  win.EdgeMode_true();
+  win.EdgeModeTrue();
   edge_type = 1;
-  write_to_file();
+  WriteToFile();
 }
 
 void View::on_pushButton_10_clicked() {
-  win.EdgeMode_false();
+  win.EdgeModeFalse();
   edge_type = 0;
-  write_to_file();
+  WriteToFile();
 }
 
 void View::on_pushButton_11_clicked() {
-  win.vertex_mode(-1);
+  win.VertexMode(-1);
   v_type = -1;
-  write_to_file();
+  WriteToFile();
 }
 
 void View::on_pushButton_12_clicked() {
-  win.vertex_mode(0);
+  win.VertexMode(0);
   v_type = 0;
-  write_to_file();
+  WriteToFile();
 }
 
 void View::on_pushButton_13_clicked() {
-  win.vertex_mode(1);
+  win.VertexMode(1);
   v_type = 1;
-  write_to_file();
+  WriteToFile();
 }
 
 void View::on_horizontalSlider_actionTriggered(int action) {
   int curr_value = ui->horizontalSlider->value();
-  win.vertex_size(curr_value);
+  win.VertexSize(curr_value);
   v_th = curr_value;
-  write_to_file();
+  WriteToFile();
 }
 
 void View::on_horizontalSlider_2_actionTriggered(int action) {
   int curr_value = ui->horizontalSlider_2->value();
-  win.edge_size(curr_value);
+  win.EdgeSize(curr_value);
   edge_th = curr_value;
-  write_to_file();
+  WriteToFile();
 }
 
 void View::on_horizontalSlider_3_actionTriggered(int action) {
   int curr_value = ui->horizontalSlider_3->value();
   curr_value -= 50;
-  win.X_move(((double)((curr_value - x_value))) / 50);
+  win.XMove(((double)((curr_value - x_value))) / 50);
   x_value = curr_value;
 }
 
 void View::on_horizontalSlider_4_actionTriggered(int action) {
   int curr_value = ui->horizontalSlider_4->value();
   curr_value -= 50;
-  win.Y_move(((double)((curr_value - y_value))) / 50);
+  win.YMove(((double)((curr_value - y_value))) / 50);
   y_value = curr_value;
 }
 
 void View::on_horizontalSlider_5_actionTriggered(int action) {
   int curr_value = ui->horizontalSlider_5->value();
   curr_value -= 50;
-  win.Z_move(((double)((curr_value - z_value))) / 50);
+  win.ZMove(((double)((curr_value - z_value))) / 50);
   z_value = curr_value;
 }
 
 void View::on_horizontalSlider_6_actionTriggered(int action) {
-  win.change_scale(((double)(50)) / scale_value);
+  win.ChangeScale(((double)(50)) / scale_value);
   int curr_value = ui->horizontalSlider_6->value();
   if (curr_value == 0) {
     curr_value++;
   }
-  win.change_scale(((double)(curr_value)) / 50);
+  win.ChangeScale(((double)(curr_value)) / 50);
   scale_value = curr_value;
-  win.update_view();
+  win.UpdateView();
 }
 
 void View::on_horizontalSlider_7_actionTriggered(int action) {
   int curr_value = ui->horizontalSlider_7->value();
   curr_value -= 50;
-  win.X_rotate(((double)((curr_value - x_rotate_value))) / 10);
+  win.XRotate(((double)((curr_value - x_rotate_value))) / 10);
   x_rotate_value = curr_value;
 }
 
 void View::on_horizontalSlider_8_actionTriggered(int action) {
   int curr_value = ui->horizontalSlider_8->value();
   curr_value -= 50;
-  win.Y_rotate(((double)((curr_value - y_rotate_value))) / 10);
+  win.YRotate(((double)((curr_value - y_rotate_value))) / 10);
   y_rotate_value = curr_value;
 }
 
 void View::on_horizontalSlider_9_actionTriggered(int action) {
   int curr_value = ui->horizontalSlider_9->value();
   curr_value -= 50;
-  win.Z_rotate(((double)((curr_value - z_rotate_value))) / 10);
+  win.ZRotate(((double)((curr_value - z_rotate_value))) / 10);
   z_rotate_value = curr_value;
 }
 
@@ -368,7 +368,7 @@ void View::on_pushButton_save_image_clicked() {
   }
 
   if (!str.isEmpty()) {
-    win.Save_image(str);
+    win.SaveImage(str);
   }
 }
 
@@ -385,9 +385,9 @@ void View::on_pushButton_gif_clicked() {
 
 void View::RecordGif() {
   QImage frame;
-  win.getFrame(&frame);
-  int width = win.getWidth();
-  int height = win.getHeight();
+  win.GetFrame(&frame);
+  int width = win.GetWidth();
+  int height = win.GetHeight();
 
   frames_.push_back(frame);
 

@@ -16,145 +16,145 @@
 namespace viewer {
 class TestQt : public QWidget {
  private:
-  QHBoxLayout *_mainLayout;
-  Controller *_cntrlr;
-  GLView *_glview;
+  QHBoxLayout *main_layout_;
+  Controller *controller_;
+  GLView *gl_view_;
 
  public:
   TestQt(QWidget *w = Q_NULLPTR)
       : QWidget(w),
-        _mainLayout(nullptr),
-        _cntrlr(new Controller()),
-        _glview(new GLView(_cntrlr, this)) {
+        main_layout_(nullptr),
+        controller_(new Controller()),
+        gl_view_(new GLView(controller_, this)) {
     setWindowTitle("3DViewer_v2.0");
     showMaximized();
-    setNewLayout(w);
-    _mainLayout->addWidget(_glview);
-    setLayout(_mainLayout);
+    SetNewLayout(w);
+    main_layout_->addWidget(gl_view_);
+    setLayout(main_layout_);
   }
 
   ~TestQt() {
-    delete _mainLayout;
-    delete _glview;
-    delete _cntrlr;
+    delete main_layout_;
+    delete gl_view_;
+    delete controller_;
   }
 
-  void getFrame(QImage *frame) {
-    *frame =
-        _glview->grabFramebuffer().scaled(_glview->width(), _glview->height());
+  void GetFrame(QImage *frame) {
+    *frame = gl_view_->grabFramebuffer().scaled(gl_view_->width(),
+                                                gl_view_->height());
   }
 
-  int getWidth() { return _glview->width(); }
+  int GetWidth() { return gl_view_->width(); }
 
-  int getHeight() { return _glview->height(); }
+  int GetHeight() { return gl_view_->height(); }
 
-  void Save_image(const QString &filePath) {
-    if (_glview) {
-      QPixmap pixmap = _glview->grab();
+  void SaveImage(const QString &file_path) {
+    if (gl_view_) {
+      QPixmap pixmap = gl_view_->grab();
       if (pixmap.isNull()) {
         return;
       }
-      if (!pixmap.save(filePath)) {
+      if (!pixmap.save(file_path)) {
         return;
       }
     }
   }
 
-  bool change_obj(std::string name) {
-    bool result = _cntrlr->setObject(name);
-    _glview->updateView();
+  bool ChangeObj(std::string name) {
+    bool result = controller_->SetObject(name);
+    gl_view_->UpdateView();
     return result;
   }
 
-  unsigned int getVertex() { return _cntrlr->getNumberVertex(); }
+  unsigned int GetVertex() { return controller_->GetNumberVertex(); }
 
-  unsigned int getFace() { return _cntrlr->getNumberFace(); }
+  unsigned int GetFace() { return controller_->GetNumberFace(); }
 
-  void X_move(double distance) {
-    _cntrlr->transformObject(0, distance);
-    _glview->updateView();
+  void XMove(double distance) {
+    controller_->TransformObject(0, distance);
+    gl_view_->UpdateView();
   }
 
-  void Y_move(double distance) {
-    _cntrlr->transformObject(1, distance);
-    _glview->updateView();
+  void YMove(double distance) {
+    controller_->TransformObject(1, distance);
+    gl_view_->UpdateView();
   }
 
-  void Z_move(double distance) {
-    _cntrlr->transformObject(2, distance);
-    _glview->updateView();
+  void ZMove(double distance) {
+    controller_->TransformObject(2, distance);
+    gl_view_->UpdateView();
   }
 
-  void X_rotate(double distance) {
-    _cntrlr->transformObject(4, distance);
-    _glview->updateView();
+  void XRotate(double distance) {
+    controller_->TransformObject(4, distance);
+    gl_view_->UpdateView();
   }
 
-  void Y_rotate(double distance) {
-    _cntrlr->transformObject(5, distance);
-    _glview->updateView();
+  void YRotate(double distance) {
+    controller_->TransformObject(5, distance);
+    gl_view_->UpdateView();
   }
 
-  void Z_rotate(double distance) {
-    _cntrlr->transformObject(6, distance);
-    _glview->updateView();
+  void ZRotate(double distance) {
+    controller_->TransformObject(6, distance);
+    gl_view_->UpdateView();
   }
 
-  void change_scale(double number) { _cntrlr->transformObject(3, number); }
+  void ChangeScale(double number) { controller_->TransformObject(3, number); }
 
-  void edge_color(double r, double g, double b) {
-    _glview->setEdgeColor(r, g, b);
+  void EdgeColor(double r, double g, double b) {
+    gl_view_->SetEdgeColor(r, g, b);
   }
 
-  void vertex_color(double r, double g, double b) {
-    _glview->setVertexColor(r, g, b);
+  void VertexColor(double r, double g, double b) {
+    gl_view_->SetVertexColor(r, g, b);
   }
-  void edge_size(int size) {
-    _glview->setEdgeSize(size);
-    _glview->updateView();
-  }
-
-  void vertex_size(int size) {
-    _glview->setVertexSize(size);
-    _glview->updateView();
+  void EdgeSize(int size) {
+    gl_view_->SetEdgeSize(size);
+    gl_view_->UpdateView();
   }
 
-  void vertex_mode(int mode) {
-    _glview->setVertexMode(mode);
-    _glview->updateView();
+  void VertexSize(int size) {
+    gl_view_->SetVertexSize(size);
+    gl_view_->UpdateView();
   }
 
-  void EdgeMode_false() {
-    _glview->setEdgeMode(false);
-    _glview->updateView();
+  void VertexMode(int mode) {
+    gl_view_->SetVertexMode(mode);
+    gl_view_->UpdateView();
   }
 
-  void EdgeMode_true() {
-    _glview->setEdgeMode(true);
-    _glview->updateView();
+  void EdgeModeFalse() {
+    gl_view_->SetEdgeMode(false);
+    gl_view_->UpdateView();
   }
 
-  void update_view() { _glview->updateView(); }
-
-  void parallel_proj() {
-    _glview->setProjectionMode(false);
-    _glview->updateView();
+  void EdgeModeTrue() {
+    gl_view_->SetEdgeMode(true);
+    gl_view_->UpdateView();
   }
 
-  void central_proj() {
-    _glview->setProjectionMode(true);
-    _glview->updateView();
+  void UpdateView() { gl_view_->UpdateView(); }
+
+  void ParallelProj() {
+    gl_view_->SetProjectionMode(false);
+    gl_view_->UpdateView();
   }
 
-  void field_color(double r, double g, double b) {
-    _glview->setFieldColor(r, g, b);
+  void CentralProj() {
+    gl_view_->SetProjectionMode(true);
+    gl_view_->UpdateView();
+  }
+
+  void FieldColor(double r, double g, double b) {
+    gl_view_->SetFieldColor(r, g, b);
   }
 
  private:
-  void setNewLayout(QWidget *w) {
-    if (_mainLayout != nullptr) delete _mainLayout;
-    _mainLayout = new QHBoxLayout();
-    setLayout(_mainLayout);
+  void SetNewLayout(QWidget *w) {
+    if (main_layout_ != nullptr) delete main_layout_;
+    main_layout_ = new QHBoxLayout();
+    setLayout(main_layout_);
   }
 };
 }  // namespace viewer

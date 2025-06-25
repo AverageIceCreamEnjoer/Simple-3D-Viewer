@@ -10,23 +10,23 @@ namespace viewer {
 /// @brief Describes the game selection menu
 class GLView : public QOpenGLWidget {
  private:
-  Controller *_cntrlr = nullptr;
-  unsigned int _ver_buf_size = 0;
-  unsigned int _edg_buf_size = 0;
-  float *_vertex_buffer = nullptr;
-  float *_edge_buffer = nullptr;
-  int _face_data_size = 0;
-  int _vertexSize = 1;
-  int _vertexMode = 0;
-  int _edgeSize = 1;
-  float *_edgeColor = nullptr;
-  float *_vertexColor = nullptr;
-  float *_fieldColor = nullptr;
-  bool _projectionMode = false;
-  bool _changeProjection = false;
-  bool _edgeMode = false;
-  float _xRot = 0, _yRot = 0, _zRot = 0;
-  QPoint mPos;
+  Controller *controller_ = nullptr;
+  unsigned int ver_buf_size_ = 0;
+  unsigned int edg_buf_size_ = 0;
+  float *vertex_buffer_ = nullptr;
+  float *edge_buffer_ = nullptr;
+  int face_data_size_ = 0;
+  int vertex_size_ = 1;
+  int vertex_mode_ = 0;
+  int edge_size_ = 1;
+  float *edge_color_ = nullptr;
+  float *vertex_color_ = nullptr;
+  float *field_color_ = nullptr;
+  bool projection_mode_ = false;
+  bool change_projection_ = false;
+  bool edge_mode_ = false;
+  float x_rot_ = 0, y_rot_ = 0, z_rot_ = 0;
+  QPoint mouse_position_;
 
   /// @brief Initialization of the OpenGL rendering context
   ///
@@ -43,7 +43,7 @@ class GLView : public QOpenGLWidget {
   /// model is changed. It is called from the paintGL() function.
   ///
   /// @return true if the buffers were updated, false otherwise.
-  bool updateBuf();
+  bool UpdateBuf();
 
   /// @brief Resizes the OpenGL rendering context
   ///
@@ -57,17 +57,17 @@ class GLView : public QOpenGLWidget {
   /// @brief Paints the reference system
   ///
   /// This function is called in paintGL() to draw the reference system.
-  void paintReferenceSystem();
+  void PaintReferenceSystem();
 
   /// @brief Paints the edges of the object
   ///
   /// This function is called in paintGL() to draw the edges of the object.
-  void paintEdges();
+  void PaintEdges();
 
   /// @brief Paints the vertices of the object
   ///
   /// This function is called in paintGL() to draw the vertices of the object.
-  void paintVertices();
+  void PaintVertices();
 
   /// @brief Redraws the entire OpenGL widget
   ///
@@ -108,37 +108,37 @@ class GLView : public QOpenGLWidget {
   ///
   /// This function is called to update the view whenever the game state
   /// changes.
-  void updateView();
+  void UpdateView();
 
   /// @brief Sets the projection mode
   ///
   /// This function is called to set the projection mode of the view.
   /// @param mode The mode to set.
-  void setProjectionMode(bool mode);
+  void SetProjectionMode(bool mode);
 
   /// @brief Sets the edge mode
   ///
   /// This function is called to set the edge mode of the view.
   /// @param mode The mode to set.
-  void setEdgeMode(bool mode);
+  void SetEdgeMode(bool mode);
 
   /// @brief Sets the vertex size
   ///
   /// This function is called to set the vertex size of the view.
   /// @param size The new size of the vertices.
-  void setVertexSize(int size);
+  void SetVertexSize(int size);
 
   /// @brief Sets the vertex mode
   ///
   /// This function is called to set the vertex mode of the view.
   /// @param mode The mode to set.
-  void setVertexMode(int mode);
+  void SetVertexMode(int mode);
 
   /// @brief Sets the edge size
   ///
   /// This function is called to set the edge size of the view.
   /// @param size The new size of the edges.
-  void setEdgeSize(int size);
+  void SetEdgeSize(int size);
 
   /// @brief Sets the edge color
   ///
@@ -146,7 +146,7 @@ class GLView : public QOpenGLWidget {
   /// @param r The red component of the color.
   /// @param g The green component of the color.
   /// @param b The blue component of the color.
-  void setEdgeColor(float r, float g, float b);
+  void SetEdgeColor(float r, float g, float b);
 
   /// @brief Sets the vertex color
   ///
@@ -154,7 +154,7 @@ class GLView : public QOpenGLWidget {
   /// @param r The red component of the color.
   /// @param g The green component of the color.
   /// @param b The blue component of the color.
-  void setVertexColor(float r, float g, float b);
+  void SetVertexColor(float r, float g, float b);
 
   /// @brief Sets the field color
   ///
@@ -162,7 +162,7 @@ class GLView : public QOpenGLWidget {
   /// @param r The red component of the color.
   /// @param g The green component of the color.
   /// @param b The blue component of the color.
-  void setFieldColor(float r, float g, float b);
+  void SetFieldColor(float r, float g, float b);
 
   /// @brief Sets the rotation
   ///
@@ -170,6 +170,6 @@ class GLView : public QOpenGLWidget {
   /// @param x The x component of the rotation.
   /// @param y The y component of the rotation.
   /// @param z The z component of the rotation.
-  void setRotation(float x, float y, float z);
+  void SetRotation(float x, float y, float z);
 };
 }  // namespace viewer

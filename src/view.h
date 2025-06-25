@@ -59,9 +59,9 @@ class View : public QMainWindow {
       field_color;
   bool check_file_conf;
 
-  void write_to_file();
-  void change_colors();
-  void changes_from_file();
+  void WriteToFile();
+  void ChangeColors();
+  void ChangesFromFile();
 
   GifFileType *gif;
   QTimer *timer;
