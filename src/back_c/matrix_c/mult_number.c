@@ -1,10 +1,10 @@
 #include "matrix.h"
 
-int mult_num(matrix_t *A, float number) {
+int MultNum(Matrix *a, float number) {
   int res = ERR_MATRIX;
-  if (check_matrix(A)) {
-    for (int i = 0; i < A->rows; i++)
-      for (int j = 0; j < A->columns; j++) A->matrix[i][j] *= number;
+  if (CheckMatrix(a)) {
+    for (int i = 0; i < a->rows; i++)
+      for (int j = 0; j < a->columns; j++) a->matrix[i][j] *= number;
     res = OK;
   }
   return res;

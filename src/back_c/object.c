@@ -1,6 +1,6 @@
 #include "object.h"
 
-int count_number(char* line) {
+int CountNumber(char* line) {
   int count = 0;
   char* token = strtok(line, " ");
   while (token != NULL) {
@@ -10,7 +10,7 @@ int count_number(char* line) {
   return count - 1;  // Исключаем первый элемент ('v' или 'f')
 }
 
-void parse_vertex(Object* obj, char* line, int row) {
+void ParseVertex(Object* obj, char* line, int row) {
   char* token = strtok(line, " ");
   int i = 0;
   while ((token = strtok(NULL, " ")) != NULL) {
@@ -19,7 +19,7 @@ void parse_vertex(Object* obj, char* line, int row) {
   }
 }
 
-void parse_face(Object* obj, char* line, int face_index) {
+void ParseFace(Object* obj, char* line, int face_index) {
   char* token = strtok(line, " ");
   unsigned int* one_face = (unsigned int*)malloc(sizeof(unsigned int) * 4);
   int count = 0;
@@ -31,7 +31,7 @@ void parse_face(Object* obj, char* line, int face_index) {
   obj->face_sizes[face_index] = count;
 }
 
-void init_object(Object* obj) {
+void InitObject(Object* obj) {
   obj->faces = NULL;
   obj->face_sizes = NULL;
   obj->amount_vertex = 0;
@@ -40,7 +40,7 @@ void init_object(Object* obj) {
   obj->amount_face = 0;
 }
 
-bool readObject(Object* obj, const char* path) {
+bool ReadObject(Object* obj, const char* path) {
   FILE* object_to_pars = fopen(path, "r");
   bool result = true;
   if (object_to_pars == NULL) {
@@ -56,11 +56,11 @@ bool readObject(Object* obj, const char* path) {
   while (result && fgets(line, sizeof(line), object_to_pars)) {
     if (obj->number_vertex <= MAX_VERTEX + 1) {
       if (line[0] == 'v' && line[1] == ' ') {
-        obj->amount_vertex += count_number(line);
+        obj->amount_vertex += CountNumber(line);
         obj->number_vertex++;
       } else if (line[0] == 'f' && line[1] == ' ') {
         obj->number_face++;
-        obj->amount_face += count_number(line);
+        obj->amount_face += CountNumber(line);
       }
     } else {
       fclose(object_to_pars);
@@ -69,7 +69,7 @@ bool readObject(Object* obj, const char* path) {
   }
   result = result && !(obj->number_vertex == 0);
   if (result) {
-    int r = create_matrix(obj->number_vertex, 3, &obj->vertices);
+    int r = CreateMatrix(obj->number_vertex, 3, &obj->vertices);
     if (r == 0) {
       obj->faces =
           (unsigned int**)malloc(sizeof(unsigned int*) * obj->number_face);
@@ -79,9 +79,9 @@ bool readObject(Object* obj, const char* path) {
       int row = 0, face_index = 0;
       while (fgets(line, sizeof(line), object_to_pars)) {
         if (line[0] == 'v' && line[1] == ' ') {
-          parse_vertex(obj, line, row++);
+          ParseVertex(obj, line, row++);
         } else if (line[0] == 'f' && line[1] == ' ') {
-          parse_face(obj, line, face_index++);
+          ParseFace(obj, line, face_index++);
         }
       }
     } else
@@ -91,8 +91,8 @@ bool readObject(Object* obj, const char* path) {
   return result;
 }
 
-void free_object(Object* obj) {
-  remove_matrix(&obj->vertices);
+void FreeObject(Object* obj) {
+  RemoveMatrix(&obj->vertices);
   if (obj->faces) {
     for (unsigned int i = 0; i < obj->number_face; ++i) {
       free(obj->faces[i]);
@@ -104,7 +104,7 @@ void free_object(Object* obj) {
   }
 }
 
-void center(Object* obj) {
+void Center(Object* obj) {
   double cX = 0, cY = 0, cZ = 0;
   for (unsigned int i = 0; i < obj->number_vertex; i++) {
     cX += obj->vertices.matrix[i][0];
@@ -121,7 +121,7 @@ void center(Object* obj) {
   }
 }
 
-void normalize(Object* obj) {
+void Normalize(Object* obj) {
   double m = fabs(obj->vertices.matrix[0][0]);
   for (unsigned int i = 0; i < obj->number_vertex; i++) {
     if (fabs(obj->vertices.matrix[i][0]) > m)
@@ -135,9 +135,9 @@ void normalize(Object* obj) {
     m = 1 / m;
   else
     m = 0.0000001;
-  mult_num(&obj->vertices, m);
+  MultNum(&obj->vertices, m);
 }
 
-void scale(Object* obj, float scope) {
-  if (scope != 0) mult_num(&obj->vertices, scope);
+void Scale(Object* obj, float scope) {
+  if (scope != 0) MultNum(&obj->vertices, scope);
 }

@@ -15,171 +15,171 @@
 
 // Тест для метода setObject
 START_TEST(set_object_success) {
-  Model* model = Model_Create();
+  Model* model = ModelCreate();
   const char* testFilePath = "obj/cube.obj";
-  Model_setObject(model, testFilePath);
-  ck_assert_str_eq(Model_getFilePath(model), testFilePath);
-  ck_assert_int_eq(Model_getNumberVertex(model), 8);
-  ck_assert_int_eq(Model_getNumberFace(model), 12);
-  Model_Destroy(model);
+  ModelSetObject(model, testFilePath);
+  ck_assert_str_eq(ModelGetFilePath(model), testFilePath);
+  ck_assert_int_eq(ModelGetNumberVertex(model), 8);
+  ck_assert_int_eq(ModelGetNumberFace(model), 12);
+  ModelDestroy(model);
 }
 END_TEST
 
 START_TEST(set_object_failure) {
-  Model* model = Model_Create();
+  Model* model = ModelCreate();
   const char* invalidFilePath = "nonexistent_file.obj";
-  Model_setObject(model, invalidFilePath);
-  ck_assert_str_eq(Model_getFilePath(model), invalidFilePath);
-  ck_assert_int_eq(Model_getNumberVertex(model), 0);
-  ck_assert_int_eq(Model_getNumberFace(model), 0);
-  Model_Destroy(model);
+  ModelSetObject(model, invalidFilePath);
+  ck_assert_str_eq(ModelGetFilePath(model), invalidFilePath);
+  ck_assert_int_eq(ModelGetNumberVertex(model), 0);
+  ck_assert_int_eq(ModelGetNumberFace(model), 0);
+  ModelDestroy(model);
 }
 END_TEST
 
 // Тест для метода transform
 START_TEST(transform_translate_x) {
-  Model* model = Model_Create();
-  Model_setObject(model, "obj/cube.obj");
-  Model_transform(model, 0, 1.0);
+  Model* model = ModelCreate();
+  ModelSetObject(model, "obj/cube.obj");
+  ModelTransform(model, 0, 1.0);
   double expected[8][3] = {
       {2.0, -1.0, -1.0}, {2.0, -1.0, 1.0}, {0.0, -1.0, 1.0}, {0.0, -1.0, -1.0},
       {2.0, 1.0, -1.0},  {2.0, 1.0, 1.0},  {0.0, 1.0, 1.0},  {0.0, 1.0, -1.0}};
-  ck_matrix_eq(model->_obj.vertices.matrix, expected, 8, 3);
-  Model_Destroy(model);
+  ck_matrix_eq(model->obj.vertices.matrix, expected, 8, 3);
+  ModelDestroy(model);
 }
 END_TEST
 
 START_TEST(transform_translate_y) {
-  Model* model = Model_Create();
-  Model_setObject(model, "obj/cube.obj");
-  Model_transform(model, 1, 2.0);
+  Model* model = ModelCreate();
+  ModelSetObject(model, "obj/cube.obj");
+  ModelTransform(model, 1, 2.0);
   double expected[8][3] = {
       {1.0, 1.0, -1.0}, {1.0, 1.0, 1.0}, {-1.0, 1.0, 1.0}, {-1.0, 1.0, -1.0},
       {1.0, 3.0, -1.0}, {1.0, 3.0, 1.0}, {-1.0, 3.0, 1.0}, {-1.0, 3.0, -1.0}};
-  ck_matrix_eq(model->_obj.vertices.matrix, expected, 8, 3);
-  Model_Destroy(model);
+  ck_matrix_eq(model->obj.vertices.matrix, expected, 8, 3);
+  ModelDestroy(model);
 }
 END_TEST
 
 START_TEST(transform_translate_z) {
-  Model* model = Model_Create();
-  Model_setObject(model, "obj/cube.obj");
-  Model_transform(model, 2, 3.0);
+  Model* model = ModelCreate();
+  ModelSetObject(model, "obj/cube.obj");
+  ModelTransform(model, 2, 3.0);
   double expected[8][3] = {
       {1.0, -1.0, 2.0}, {1.0, -1.0, 4.0}, {-1.0, -1.0, 4.0}, {-1.0, -1.0, 2.0},
       {1.0, 1.0, 2.0},  {1.0, 1.0, 4.0},  {-1.0, 1.0, 4.0},  {-1.0, 1.0, 2.0}};
-  ck_matrix_eq(model->_obj.vertices.matrix, expected, 8, 3);
-  Model_Destroy(model);
+  ck_matrix_eq(model->obj.vertices.matrix, expected, 8, 3);
+  ModelDestroy(model);
 }
 END_TEST
 
 START_TEST(transform_scale) {
-  Model* model = Model_Create();
-  Model_setObject(model, "obj/cube.obj");
-  Model_transform(model, 3, 2.0);
+  Model* model = ModelCreate();
+  ModelSetObject(model, "obj/cube.obj");
+  ModelTransform(model, 3, 2.0);
   double expected[8][3] = {{2.0, -2.0, -2.0}, {2.0, -2.0, 2.0},
                            {-2.0, -2.0, 2.0}, {-2.0, -2.0, -2.0},
                            {2.0, 2.0, -2.0},  {2.0, 2.0, 2.0},
                            {-2.0, 2.0, 2.0},  {-2.0, 2.0, -2.0}};
-  ck_matrix_eq(model->_obj.vertices.matrix, expected, 8, 3);
-  Model_Destroy(model);
+  ck_matrix_eq(model->obj.vertices.matrix, expected, 8, 3);
+  ModelDestroy(model);
 }
 END_TEST
 
 START_TEST(transform_rotate_x) {
-  Model* model = Model_Create();
-  Model_setObject(model, "obj/cube.obj");
-  Model_transform(model, 4, M_PI / 2);
+  Model* model = ModelCreate();
+  ModelSetObject(model, "obj/cube.obj");
+  ModelTransform(model, 4, M_PI / 2);
   float expected[8][3] = {{1, 1, -1}, {1, -1, -1}, {-1, -1, -1}, {-1, 1, -1},
                           {1, 1, 1},  {1, -1, 1},  {-1, -1, 1},  {-1, 1, 1}};
-  ck_matrix_eq(model->_obj.vertices.matrix, expected, 8, 3);
-  Model_Destroy(model);
+  ck_matrix_eq(model->obj.vertices.matrix, expected, 8, 3);
+  ModelDestroy(model);
 }
 END_TEST
 
 START_TEST(transform_rotate_y) {
-  Model* model = Model_Create();
-  Model_setObject(model, "obj/cube.obj");
-  Model_transform(model, 5, M_PI / 2);
+  Model* model = ModelCreate();
+  ModelSetObject(model, "obj/cube.obj");
+  ModelTransform(model, 5, M_PI / 2);
   float expected[8][3] = {{-1.0, -1.0, -1.0}, {1.0, -1.0, -1.0},
                           {1.0, -1.0, 1.0},   {-1.0, -1.0, 1.0},
                           {-1, 1, -1},        {1, 1, -1},
                           {1, 1, 1},          {-1, 1, 1}};
-  ck_matrix_eq(model->_obj.vertices.matrix, expected, 8, 3);
-  Model_Destroy(model);
+  ck_matrix_eq(model->obj.vertices.matrix, expected, 8, 3);
+  ModelDestroy(model);
 }
 END_TEST
 
 START_TEST(transform_rotate_z) {
-  Model* model = Model_Create();
-  Model_setObject(model, "obj/cube.obj");
-  Model_transform(model, 6, M_PI / 2);
+  Model* model = ModelCreate();
+  ModelSetObject(model, "obj/cube.obj");
+  ModelTransform(model, 6, M_PI / 2);
   float expected[8][3] = {{1, 1, -1},  {1, 1, 1},  {1, -1, 1},  {1, -1, -1},
                           {-1, 1, -1}, {-1, 1, 1}, {-1, -1, 1}, {-1, -1, -1}};
-  ck_matrix_eq(model->_obj.vertices.matrix, expected, 8, 3);
-  Model_Destroy(model);
+  ck_matrix_eq(model->obj.vertices.matrix, expected, 8, 3);
+  ModelDestroy(model);
 }
 END_TEST
 
 // Тест для метода getFaceData
 START_TEST(get_face_size) {
-  Model* model = Model_Create();
-  Model_setObject(model, "obj/cube.obj");
-  int face_size = Model_getFaceSize(model, 0);
+  Model* model = ModelCreate();
+  ModelSetObject(model, "obj/cube.obj");
+  int face_size = ModelGetFaceSize(model, 0);
   ck_assert_int_eq(face_size, 9);
-  Model_Destroy(model);
+  ModelDestroy(model);
 }
 END_TEST
 
 // Тест для метода toNormal
 START_TEST(to_normal) {
-  Model* model = Model_Create();
-  Model_setObject(model, "obj/cube.obj");
-  Model_transform(model, 3, 2.0);  // Масштабируем на 2
-  Model_toNormal(model);
-  ck_assert_float_eq(model->_scale, 1.0);
-  Model_Destroy(model);
+  Model* model = ModelCreate();
+  ModelSetObject(model, "obj/cube.obj");
+  ModelTransform(model, 3, 2.0);  // Масштабируем на 2
+  ModelToNormal(model);
+  ck_assert_float_eq(model->scale, 1.0);
+  ModelDestroy(model);
 }
 END_TEST
 
 // Тест для метода getVertex
 START_TEST(get_vertex) {
-  Model* model = Model_Create();
-  Model_setObject(model, "obj/cube.obj");
-  ck_assert_double_eq(Model_getVertex(model, 0, 0), 1.0);
-  ck_assert_double_eq(Model_getVertex(model, 0, 1), -1.0);
-  ck_assert_double_eq(Model_getVertex(model, 0, 2), -1.0);
-  ck_assert_double_eq(Model_getVertex(model, 1, 0), 1.0);
-  ck_assert_double_eq(Model_getVertex(model, 1, 1), -1.0);
-  ck_assert_double_eq(Model_getVertex(model, 1, 2), 1.0);
-  Model_Destroy(model);
+  Model* model = ModelCreate();
+  ModelSetObject(model, "obj/cube.obj");
+  ck_assert_double_eq(ModelGetVertex(model, 0, 0), 1.0);
+  ck_assert_double_eq(ModelGetVertex(model, 0, 1), -1.0);
+  ck_assert_double_eq(ModelGetVertex(model, 0, 2), -1.0);
+  ck_assert_double_eq(ModelGetVertex(model, 1, 0), 1.0);
+  ck_assert_double_eq(ModelGetVertex(model, 1, 1), -1.0);
+  ck_assert_double_eq(ModelGetVertex(model, 1, 2), 1.0);
+  ModelDestroy(model);
 }
 END_TEST
 
 // Тест для метода getBufSize
 START_TEST(get_buf_size) {
-  Model* model = Model_Create();
-  Model_setObject(model, "obj/cube.obj");
+  Model* model = ModelCreate();
+  ModelSetObject(model, "obj/cube.obj");
   unsigned int verbuf, edgbuf;
-  Model_getBufSize(model, &verbuf, &edgbuf);
+  ModelGetBufSize(model, &verbuf, &edgbuf);
   ck_assert_int_eq(verbuf, 24);
   ck_assert_int_eq(edgbuf, 108);
-  Model_Destroy(model);
+  ModelDestroy(model);
 }
 END_TEST
 
 // Тест для метода loadBuffer
 START_TEST(load_buffer) {
-  Model* model = Model_Create();
-  Model_setObject(model, "obj/cube.obj");
+  Model* model = ModelCreate();
+  ModelSetObject(model, "obj/cube.obj");
   unsigned int verbuf, edgbuf;
-  Model_getBufSize(model, &verbuf, &edgbuf);
+  ModelGetBufSize(model, &verbuf, &edgbuf);
   float verbuf2[24], edgbuf2[108];
-  Model_loadBuffer(model, verbuf2, edgbuf2, true);
+  ModelLoadBuffer(model, verbuf2, edgbuf2, true);
   for (int i = 0; i < 24; ++i) {
-    ck_assert_double_eq(verbuf2[i], model->_obj.vertices.matrix[i / 3][i % 3]);
+    ck_assert_double_eq(verbuf2[i], model->obj.vertices.matrix[i / 3][i % 3]);
   }
-  Model_Destroy(model);
+  ModelDestroy(model);
 }
 END_TEST
 

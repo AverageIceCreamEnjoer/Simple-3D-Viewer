@@ -1,148 +1,146 @@
 #include "model.h"
 
-Model* Model_Create() {
+Model* ModelCreate() {
   Model* model = (Model*)malloc(sizeof(Model));
   if (model != NULL) {
-    strcpy(model->_filePath, "");
-    model->_scale = 1;
-    init_object(&model->_obj);
+    strcpy(model->file_path, "");
+    model->scale = 1;
+    InitObject(&model->obj);
     model->setted = false;
-    model->_obj_changed = false;
-    model->_changed = false;
-    model->_ver_buf_size = 0;
-    model->_edge_buf_size = 0;
+    model->obj_changed = false;
+    model->changed = false;
+    model->ver_buf_size = 0;
+    model->edge_buf_size = 0;
   }
   return model;
 }
 
-void Model_Destroy(Model* model) {
+void ModelDestroy(Model* model) {
   if (model != NULL) {
-    free_object(&model->_obj);
+    FreeObject(&model->obj);
     free(model);
   }
 }
 
-bool Model_setObject(Model* model, const char* filePath) {
-  strcpy(model->_filePath, filePath);
+bool ModelSetObject(Model* model, const char* file_path) {
+  strcpy(model->file_path, file_path);
   if (model->setted) {
-    free_object(&model->_obj);
-    init_object(&model->_obj);
+    FreeObject(&model->obj);
+    InitObject(&model->obj);
   }
-  model->setted = readObject(&model->_obj, model->_filePath);
-  model->_obj_changed = true;
+  model->setted = ReadObject(&model->obj, model->file_path);
+  model->obj_changed = true;
   if (model->setted) {
-    center(&model->_obj);
-    normalize(&model->_obj);
+    Center(&model->obj);
+    Normalize(&model->obj);
   }
   return model->setted;
 }
 
-void Model_transform(Model* model, int operation, float value) {
+void ModelTransform(Model* model, int operation, float value) {
   switch (operation) {
     case 0:
-      translate(&model->_obj, value, 0, 0);
+      Translate(&model->obj, value, 0, 0);
       break;
     case 1:
-      translate(&model->_obj, 0, value, 0);
+      Translate(&model->obj, 0, value, 0);
       break;
     case 2:
-      translate(&model->_obj, 0, 0, value);
+      Translate(&model->obj, 0, 0, value);
       break;
     case 3:
-      scale(&model->_obj, value / model->_scale);
-      model->_scale = value;
+      Scale(&model->obj, value / model->scale);
+      model->scale = value;
       break;
     case 4:
-      rotateX(&model->_obj, value);
+      RotateX(&model->obj, value);
       break;
     case 5:
-      rotateY(&model->_obj, value);
+      RotateY(&model->obj, value);
       break;
     case 6:
-      rotateZ(&model->_obj, value);
+      RotateZ(&model->obj, value);
       break;
   }
-  model->_changed = true;
+  model->changed = true;
 }
 
-void Model_toNormal(Model* model) {
-  if (readObject(&model->_obj, model->_filePath)) {
-    model->_scale = 1;
-    normalize(&model->_obj);
-    center(&model->_obj);
-    model->_changed = true;
+void ModelToNormal(Model* model) {
+  if (ReadObject(&model->obj, model->file_path)) {
+    model->scale = 1;
+    Normalize(&model->obj);
+    Center(&model->obj);
+    model->changed = true;
   }
 }
 
-float Model_getVertex(Model* model, int row, int col) {
-  return model->_obj.vertices.matrix[row][col];
+float ModelGetVertex(Model* model, int row, int col) {
+  return model->obj.vertices.matrix[row][col];
 }
 
-const char* Model_getFilePath(Model* model) { return model->_filePath; }
+const char* ModelGetFilePath(Model* model) { return model->file_path; }
 
-float Model_getScale(Model* model) { return model->_scale; }
+float ModelGetScale(Model* model) { return model->scale; }
 
-unsigned int Model_getNumberVertex(Model* model) {
-  return model->_obj.number_vertex;
+unsigned int ModelGetNumberVertex(Model* model) {
+  return model->obj.number_vertex;
 }
 
-unsigned int Model_getNumberFace(Model* model) {
-  return model->_obj.number_face;
+unsigned int ModelGetNumberFace(Model* model) { return model->obj.number_face; }
+
+unsigned int ModelGetFaceSize(Model* model, unsigned int index) {
+  return model->obj.face_sizes[index] * 3;
 }
 
-unsigned int Model_getFaceSize(Model* model, unsigned int index) {
-  return model->_obj.face_sizes[index] * 3;
-}
+const Object* ModelGetObject(Model* model) { return &model->obj; }
 
-const Object* Model_getObject(Model* model) { return &model->_obj; }
-
-void Model_getBufSize(Model* model, unsigned int* ver_buf_size,
-                      unsigned int* edge_buf_size) {
+void ModelGetBufSize(Model* model, unsigned int* ver_buf_size,
+                     unsigned int* edge_buf_size) {
   if (model->setted) {
-    if (model->_obj_changed) {
-      *ver_buf_size = model->_obj.number_vertex * 3;
+    if (model->obj_changed) {
+      *ver_buf_size = model->obj.number_vertex * 3;
       *edge_buf_size = 0;
-      for (unsigned int i = 0; i < model->_obj.number_face; i++) {
-        *edge_buf_size += model->_obj.face_sizes[i] * 3;
+      for (unsigned int i = 0; i < model->obj.number_face; i++) {
+        *edge_buf_size += model->obj.face_sizes[i] * 3;
       }
-      model->_ver_buf_size = *ver_buf_size;
-      model->_edge_buf_size = *edge_buf_size;
-      model->_obj_changed = false;
+      model->ver_buf_size = *ver_buf_size;
+      model->edge_buf_size = *edge_buf_size;
+      model->obj_changed = false;
     } else {
-      *ver_buf_size = model->_ver_buf_size;
-      *edge_buf_size = model->_edge_buf_size;
+      *ver_buf_size = model->ver_buf_size;
+      *edge_buf_size = model->edge_buf_size;
     }
   } else {
     *ver_buf_size = 0;
     *edge_buf_size = 0;
-    model->_obj_changed = false;
+    model->obj_changed = false;
   }
 }
 
-void Model_loadBuffer(Model* model, float* vertex_buffer, float* edge_buffer,
-                      bool load) {
+void ModelLoadBuffer(Model* model, float* vertex_buffer, float* edge_buffer,
+                     bool load) {
   if (model->setted) {
-    if (model->_changed || load) {
-      for (unsigned int i = 0; i < model->_obj.number_vertex; ++i) {
-        vertex_buffer[i * 3] = model->_obj.vertices.matrix[i][0];
-        vertex_buffer[i * 3 + 1] = model->_obj.vertices.matrix[i][1];
-        vertex_buffer[i * 3 + 2] = model->_obj.vertices.matrix[i][2];
+    if (model->changed || load) {
+      for (unsigned int i = 0; i < model->obj.number_vertex; ++i) {
+        vertex_buffer[i * 3] = model->obj.vertices.matrix[i][0];
+        vertex_buffer[i * 3 + 1] = model->obj.vertices.matrix[i][1];
+        vertex_buffer[i * 3 + 2] = model->obj.vertices.matrix[i][2];
       }
       unsigned int index = 0;
-      for (unsigned int i = 0; i < model->_obj.number_face; ++i) {
+      for (unsigned int i = 0; i < model->obj.number_face; ++i) {
         for (unsigned int j = 0;
-             j < model->_obj.face_sizes[i] &&
-             model->_obj.faces[i][j] < model->_obj.number_vertex;
+             j < model->obj.face_sizes[i] &&
+             model->obj.faces[i][j] < model->obj.number_vertex;
              ++j) {
           edge_buffer[index++] =
-              model->_obj.vertices.matrix[model->_obj.faces[i][j]][0];
+              model->obj.vertices.matrix[model->obj.faces[i][j]][0];
           edge_buffer[index++] =
-              model->_obj.vertices.matrix[model->_obj.faces[i][j]][1];
+              model->obj.vertices.matrix[model->obj.faces[i][j]][1];
           edge_buffer[index++] =
-              model->_obj.vertices.matrix[model->_obj.faces[i][j]][2];
+              model->obj.vertices.matrix[model->obj.faces[i][j]][2];
         }
       }
-      model->_changed = false;
+      model->changed = false;
     }
   }
 }

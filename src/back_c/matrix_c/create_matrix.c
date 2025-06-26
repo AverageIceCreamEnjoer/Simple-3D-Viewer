@@ -1,6 +1,6 @@
 #include "matrix.h"
 
-int create_matrix(int rows, int columns, matrix_t *result) {
+int CreateMatrix(int rows, int columns, Matrix *result) {
   int res = ERR_MATRIX;
   if (result && rows > 0 && columns > 0) {
     res = OK;

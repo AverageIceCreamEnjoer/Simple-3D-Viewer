@@ -11,7 +11,7 @@
 #define MAX_VERTEX 1000000  // миллион
 
 typedef struct {
-  matrix_t vertices;           // значение вершин (xyz)
+  Matrix vertices;             // значение вершин (xyz)
   unsigned int** faces;        // значение face
   unsigned int* face_sizes;    // размеры каждого face
   unsigned int amount_vertex;  // количество координат вершин
@@ -20,13 +20,13 @@ typedef struct {
   unsigned int amount_face;    // итоговое количество face
 } Object;
 
-void init_object(Object* obj);
-bool readObject(Object* obj, const char* path);
-void free_object(Object* obj);
-void center(Object* obj);
-void normalize(Object* obj);
-void scale(Object* obj, float scope);
-void rotateX(Object* obj, float angleX);
-void rotateY(Object* obj, float angleY);
-void rotateZ(Object* obj, float angleZ);
-void translate(Object* obj, float x, float y, float z);
+void InitObject(Object* obj);
+bool ReadObject(Object* obj, const char* path);
+void FreeObject(Object* obj);
+void Center(Object* obj);
+void Normalize(Object* obj);
+void Scale(Object* obj, float scope);
+void RotateX(Object* obj, float angle);
+void RotateY(Object* obj, float angle);
+void RotateZ(Object* obj, float angle);
+void Translate(Object* obj, float x, float y, float z);
