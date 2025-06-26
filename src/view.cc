@@ -52,7 +52,7 @@ View::View(QWidget* parent) : QMainWindow(parent), ui(new Ui::View) {
   check_file_conf = true;
 }
 
-View::~View() { delete ui; }
+View::~View() {}
 
 void View::WriteToFile() {
   std::ofstream out(GetExecutablePath() + "/build/models.txt",
@@ -378,8 +378,8 @@ void View::on_pushButton_gif_clicked() {
   frame_count_ = 0;
 
   // Настраиваем таймер
-  timer_ = new QTimer(this);
-  connect(timer_, &QTimer::timeout, this, &View::RecordGif);
+  timer_ = std::unique_ptr<QTimer>(new QTimer(this));
+  connect(timer_.get(), &QTimer::timeout, this, &View::RecordGif);
   timer_->start(100);  // Записываем кадры каждые 100 мс (10 FPS)
 }
 

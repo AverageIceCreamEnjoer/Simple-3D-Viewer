@@ -6,29 +6,16 @@
 #include <iostream>
 
 namespace viewer {
-GLView::GLView(Controller *c, QWidget *w) : QOpenGLWidget(w), controller_(c) {
-  edge_color_ = new float[3];
-  edge_color_[0] = 1;
-  edge_color_[1] = 1;
-  edge_color_[2] = 0;
-  vertex_color_ = new float[3];
-  vertex_color_[0] = 1;
-  vertex_color_[1] = 0;
-  vertex_color_[2] = 1;
-  field_color_ = new float[3];
-  field_color_[0] = 0.5;
-  field_color_[1] = 0.5;
-  field_color_[2] = 0.5;
+GLView::GLView(std::shared_ptr<Controller> c, QWidget *w)
+    : QOpenGLWidget(w),
+      controller_(c),
+      edge_color_{1, 1, 0},
+      vertex_color_{1, 0, 1},
+      field_color_{0.5, 0.5, 0.5} {
   setGeometry(100, 100, 1000, 1000);
 }
 
-GLView::~GLView() {
-  delete[] vertex_buffer_;
-  delete[] edge_buffer_;
-  delete[] edge_color_;
-  delete[] vertex_color_;
-  delete[] field_color_;
-}
+GLView::~GLView() {}
 
 void GLView::initializeGL() { glEnable(GL_DEPTH_TEST); }
 
@@ -64,7 +51,7 @@ void GLView::paintGL() {
   PaintReferenceSystem();
   if (controller_->IsSetted()) {
     bool reload = UpdateBuf();
-    controller_->LoadBuffer(vertex_buffer_, edge_buffer_, reload);
+    controller_->LoadBuffer(vertex_buffer_.get(), edge_buffer_.get(), reload);
     PaintVertices();
     PaintEdges();
   }
@@ -74,20 +61,18 @@ bool GLView::UpdateBuf() {
   std::pair<unsigned int, unsigned int> size = controller_->GetBufSize();
   bool t1 = ver_buf_size_ != size.first, t2 = edg_buf_size_ != size.second;
   if (t1) {
-    if (ver_buf_size_ != 0) delete[] vertex_buffer_;
+    // if (ver_buf_size_ != 0) delete[] vertex_buffer_;
     ver_buf_size_ = size.first;
-    if (ver_buf_size_ > 0)
-      vertex_buffer_ = new float[ver_buf_size_];
-    else
-      vertex_buffer_ = nullptr;
+    vertex_buffer_ = (ver_buf_size_ > 0)
+                         ? std::unique_ptr<float>(new float[ver_buf_size_])
+                         : nullptr;
   }
   if (t2) {
-    if (edg_buf_size_ != 0) delete[] edge_buffer_;
+    // if (edg_buf_size_ != 0) delete[] edge_buffer_;
     edg_buf_size_ = size.second;
-    if (edg_buf_size_ > 0)
-      edge_buffer_ = new float[edg_buf_size_];
-    else
-      edge_buffer_ = nullptr;
+    edge_buffer_ = (edg_buf_size_ > 0)
+                       ? std::unique_ptr<float>(new float[edg_buf_size_])
+                       : nullptr;
   }
   return t1 || t2;
 }
@@ -122,7 +107,7 @@ void GLView::PaintEdges() {
   glLineWidth(edge_size_);
   glColor3f(edge_color_[0], edge_color_[1], edge_color_[2]);
   unsigned int index = 0;
-  glVertexPointer(3, GL_FLOAT, 0, edge_buffer_);
+  glVertexPointer(3, GL_FLOAT, 0, edge_buffer_.get());
   for (int i = 0; i < controller_->GetNumberFace() && index < edg_buf_size_ / 3;
        i++) {
     glDrawArrays(GL_LINE_LOOP, index, controller_->GetFaceSize(i) / 3);
@@ -141,7 +126,7 @@ void GLView::PaintVertices() {
       glDisable(GL_POINT_SMOOTH);
     glPointSize(vertex_size_);
     glEnableClientState(GL_VERTEX_ARRAY);
-    glVertexPointer(3, GL_FLOAT, 0, vertex_buffer_);
+    glVertexPointer(3, GL_FLOAT, 0, vertex_buffer_.get());
     glDrawArrays(GL_POINTS, 0, ver_buf_size_ / 3);
     glDisable(GL_VERTEX_ARRAY);
   }
