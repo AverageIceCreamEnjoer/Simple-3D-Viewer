@@ -14,14 +14,14 @@
 #include "view/glview.h"
 
 namespace viewer {
-class TestQt : public QWidget {
+class QFigureView : public QWidget {
  private:
-  QHBoxLayout *main_layout_;
-  Controller *controller_;
-  GLView *gl_view_;
+  std::unique_ptr<QHBoxLayout> main_layout_;
+  std::shared_ptr<Controller> controller_;
+  std::unique_ptr<GLView> gl_view_;
 
  public:
-  TestQt(QWidget *w = Q_NULLPTR)
+  QFigureView(QWidget *w = Q_NULLPTR)
       : QWidget(w),
         main_layout_(nullptr),
         controller_(new Controller()),
@@ -29,15 +29,11 @@ class TestQt : public QWidget {
     setWindowTitle("3DViewer_v2.0");
     showMaximized();
     SetNewLayout(w);
-    main_layout_->addWidget(gl_view_);
-    setLayout(main_layout_);
+    main_layout_->addWidget(gl_view_.get());
+    setLayout(main_layout_.get());
   }
 
-  ~TestQt() {
-    delete main_layout_;
-    delete gl_view_;
-    delete controller_;
-  }
+  ~QFigureView() {}
 
   void GetFrame(QImage *frame) {
     *frame = gl_view_->grabFramebuffer().scaled(gl_view_->width(),
@@ -152,9 +148,8 @@ class TestQt : public QWidget {
 
  private:
   void SetNewLayout(QWidget *w) {
-    if (main_layout_ != nullptr) delete main_layout_;
-    main_layout_ = new QHBoxLayout();
-    setLayout(main_layout_);
+    main_layout_ = std::unique_ptr<QHBoxLayout>(new QHBoxLayout());
+    setLayout(main_layout_.get());
   }
 };
 }  // namespace viewer

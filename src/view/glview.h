@@ -3,6 +3,7 @@
 #include <QtOpenGL>
 #include <QtOpenGLWidgets>
 #include <QtWidgets>
+#include <array>
 
 #include "../ctrl_c/controller.h"
 
@@ -10,18 +11,18 @@ namespace viewer {
 /// @brief Describes the game selection menu
 class GLView : public QOpenGLWidget {
  private:
-  Controller *controller_ = nullptr;
+  std::shared_ptr<Controller> controller_;
   unsigned int ver_buf_size_ = 0;
   unsigned int edg_buf_size_ = 0;
-  float *vertex_buffer_ = nullptr;
-  float *edge_buffer_ = nullptr;
+  std::unique_ptr<float> vertex_buffer_;
+  std::unique_ptr<float> edge_buffer_;
   int face_data_size_ = 0;
   int vertex_size_ = 1;
   int vertex_mode_ = 0;
   int edge_size_ = 1;
-  float *edge_color_ = nullptr;
-  float *vertex_color_ = nullptr;
-  float *field_color_ = nullptr;
+  std::array<float, 3> edge_color_;
+  std::array<float, 3> vertex_color_;
+  std::array<float, 3> field_color_;
   bool projection_mode_ = false;
   bool change_projection_ = false;
   bool edge_mode_ = false;
@@ -96,7 +97,7 @@ class GLView : public QOpenGLWidget {
   ///
   /// @param c The controller object that manages the game state.
   /// @param w The parent widget of the GLView object.
-  GLView(Controller *c, QWidget *w = Q_NULLPTR);
+  GLView(std::shared_ptr<Controller> c, QWidget *w = Q_NULLPTR);
 
   /// @brief Destroys a GLView object
   ///

@@ -52,7 +52,7 @@ class View : public QMainWindow {
 
  private:
   std::unique_ptr<Ui::View> ui;
-  TestQt win;
+  QFigureView win;
   int x_value, y_value, z_value, scale_value, x_rotate_value, y_rotate_value,
       z_rotate_value;
   int projection, edge_type, edge_th, edge_color, v_type, v_color, v_th,
