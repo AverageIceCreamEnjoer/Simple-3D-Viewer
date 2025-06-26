@@ -51,7 +51,7 @@ class View : public QMainWindow {
   void RecordGif();
 
  private:
-  Ui::View *ui;
+  std::unique_ptr<Ui::View> ui;
   TestQt win;
   int x_value, y_value, z_value, scale_value, x_rotate_value, y_rotate_value,
       z_rotate_value;
@@ -63,11 +63,8 @@ class View : public QMainWindow {
   void ChangeColors();
   void ChangesFromFile();
 
-  GifFileType *gif;
-  QTimer *timer;
-
   std::vector<QImage> frames_;  // Хранение кадров
-  QTimer *timer_ = nullptr;
+  std::unique_ptr<QTimer> timer_;
   int frame_count_ = 0;  // Количество записанных кадров
   int max_frames_ = 50;
 };
