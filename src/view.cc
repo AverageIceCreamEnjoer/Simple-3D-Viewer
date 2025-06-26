@@ -127,10 +127,10 @@ void View::ChangesFromFile() {
   std::ifstream in(GetExecutablePath() + "/build/models.txt");
   if (std::getline(in, from_conf) && check_file_conf) {
     if (std::stoi(from_conf) == 1) {
-      win.CentralProj();
+      win.ParallelProj();
       projection = 1;
     } else {
-      win.ParallelProj();
+      win.CentralProj();
       projection = 0;
     }
 
