@@ -21,13 +21,12 @@ class Object {
   void ParseFace(std::string& line);
 
  public:
-  Matrix vertices;  // значение вершин (xyz)
-  std::vector<std::unique_ptr<std::vector<unsigned int>>>
-      faces;                   // значение face
-  unsigned int amount_vertex;  // количество координат вершин
-  unsigned int number_vertex;  // количество вершин
-  unsigned int number_face;    // количество ребер
-  unsigned int amount_face;    // итоговое количество face
+  Matrix vertices;                               // значение вершин (xyz)
+  std::vector<std::vector<unsigned int>> faces;  // значение face
+  unsigned int amount_vertex;                    // количество координат вершин
+  unsigned int number_vertex;                    // количество вершин
+  unsigned int number_face;                      // количество ребер
+  unsigned int amount_face;                      // итоговое количество face
 
   Object();
   bool ReadObject(const std::string path);

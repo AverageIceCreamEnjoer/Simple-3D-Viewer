@@ -87,14 +87,14 @@ void Object::ParseVertex(std::string& line, int row) {
 void Object::ParseFace(std::string& line) {
   std::istringstream iss(line);
   std::string token;
-  std::vector<unsigned int>* one_face = new std::vector<unsigned int>();
+  std::vector<unsigned int> one_face = std::vector<unsigned int>();
 
   iss >> token;
   while (iss >> token) {
     unsigned int tmp = std::atoi(token.c_str());
-    one_face->push_back(tmp - 1);
+    one_face.push_back(tmp - 1);
   }
-  faces.push_back(std::unique_ptr<std::vector<unsigned int>>(one_face));
+  faces.push_back(std::move(one_face));
 }
 
 Object::~Object() {}
@@ -139,7 +139,7 @@ void Object::Scale(double scope) {
 unsigned int Object::GetMaxFaceSize() const {
   unsigned int result = 0;
   for (size_t i = 0; i < faces.size(); ++i)
-    if (faces[i]->size() > result) result = faces[i]->size() * 3;
+    if (faces[i].size() > result) result = faces[i].size() * 3;
   return result;
 }
 };  // namespace viewer

@@ -68,7 +68,7 @@ unsigned int Model::GetNumberVertex() const { return object_.number_vertex; }
 unsigned int Model::GetNumberFace() const { return object_.number_face; }
 
 unsigned int Model::GetFaceSize(unsigned int index) const {
-  return object_.faces[index]->size() * 3;
+  return object_.faces[index].size() * 3;
 }
 
 const Object& Model::GetObject() const { return object_; }
@@ -103,10 +103,10 @@ void Model::LoadBuffer(float* vertex_buffer, float* edge_buffer, bool load) {
       for (unsigned int i = 0; i < GetNumberFace() && index < edge_buf_size_;
            ++i) {
         for (unsigned int j = 0;
-             j < object_.faces[i]->size() && index < edge_buf_size_; ++j) {
-          edge_buffer[index++] = object_.vertices(object_.faces[i]->at(j), 0);
-          edge_buffer[index++] = object_.vertices(object_.faces[i]->at(j), 1);
-          edge_buffer[index++] = object_.vertices(object_.faces[i]->at(j), 2);
+             j < object_.faces[i].size() && index < edge_buf_size_; ++j) {
+          edge_buffer[index++] = object_.vertices(object_.faces[i][j], 0);
+          edge_buffer[index++] = object_.vertices(object_.faces[i][j], 1);
+          edge_buffer[index++] = object_.vertices(object_.faces[i][j], 2);
         }
       }
       changed_ = false;
