@@ -2,21 +2,29 @@
 
 // Тест для метода SetObject
 TEST_F(ModelTest, SetObject_Success) {
-  std::string testFilePath = "obj/cube.obj";
-  bool result = model.SetObject(testFilePath);
+  std::string test_file_path = "obj/cube.obj";
+  bool result = model.SetObject(test_file_path);
   EXPECT_TRUE(result);
-  EXPECT_EQ(model.GetFilePath(), testFilePath);
+  EXPECT_EQ(model.GetFilePath(), test_file_path);
   EXPECT_EQ(model.GetNumberVertex(), 8);
   EXPECT_EQ(model.GetNumberFace(), 12);
 }
 
 TEST_F(ModelTest, SetObject_Failure) {
-  std::string invalidFilePath = "nonexistent_file.obj";
-  bool result = model.SetObject(invalidFilePath);
+  std::string invalid_file_path = "nonexistent_file.obj";
+  bool result = model.SetObject(invalid_file_path);
   EXPECT_FALSE(result);
-  EXPECT_EQ(model.GetFilePath(), invalidFilePath);
+  EXPECT_EQ(model.GetFilePath(), invalid_file_path);
   EXPECT_EQ(model.GetNumberVertex(), 0);
   EXPECT_EQ(model.GetNumberFace(), 0);
+}
+
+// Тест для метода IsSetted
+TEST_F(ModelTest, IsSetted) {
+  EXPECT_TRUE(model.IsSetted());
+  std::string invalid_file_path = "nonexistent_file.obj";
+  model.SetObject(invalid_file_path);
+  EXPECT_FALSE(model.IsSetted());
 }
 
 // Тест для метода Transform
@@ -25,10 +33,10 @@ TEST_F(ModelTest, Transform_TranslateX) {
   std::vector<std::vector<double>> expected_src = {
       {2.0, -1.0, -1.0}, {2.0, -1.0, 1.0}, {0.0, -1.0, 1.0}, {0.0, -1.0, -1.0},
       {2.0, 1.0, -1.0},  {2.0, 1.0, 1.0},  {0.0, 1.0, 1.0},  {0.0, 1.0, -1.0}};
-  Matrix expectedVertices(8, 3);
+  Matrix expected_vertices(8, 3);
   for (int i = 0; i < 8; ++i)
-    for (int j = 0; j < 3; ++j) expectedVertices(i, j) = expected_src[i][j];
-  EXPECT_TRUE(model.GetObject().vertices == expectedVertices);
+    for (int j = 0; j < 3; ++j) expected_vertices(i, j) = expected_src[i][j];
+  EXPECT_TRUE(model.GetObject().vertices == expected_vertices);
 }
 
 TEST_F(ModelTest, Transform_TranslateY) {
@@ -36,10 +44,10 @@ TEST_F(ModelTest, Transform_TranslateY) {
   std::vector<std::vector<double>> expected_src = {
       {1.0, 1.0, -1.0}, {1.0, 1.0, 1.0}, {-1.0, 1.0, 1.0}, {-1.0, 1.0, -1.0},
       {1.0, 3.0, -1.0}, {1.0, 3.0, 1.0}, {-1.0, 3.0, 1.0}, {-1.0, 3.0, -1.0}};
-  Matrix expectedVertices(8, 3);
+  Matrix expected_vertices(8, 3);
   for (int i = 0; i < 8; ++i)
-    for (int j = 0; j < 3; ++j) expectedVertices(i, j) = expected_src[i][j];
-  EXPECT_TRUE(model.GetObject().vertices == expectedVertices);
+    for (int j = 0; j < 3; ++j) expected_vertices(i, j) = expected_src[i][j];
+  EXPECT_TRUE(model.GetObject().vertices == expected_vertices);
 }
 
 TEST_F(ModelTest, Transform_TranslateZ) {
@@ -47,10 +55,10 @@ TEST_F(ModelTest, Transform_TranslateZ) {
   std::vector<std::vector<double>> expected_src = {
       {1.0, -1.0, 2.0}, {1.0, -1.0, 4.0}, {-1.0, -1.0, 4.0}, {-1.0, -1.0, 2.0},
       {1.0, 1.0, 2.0},  {1.0, 1.0, 4.0},  {-1.0, 1.0, 4.0},  {-1.0, 1.0, 2.0}};
-  Matrix expectedVertices(8, 3);
+  Matrix expected_vertices(8, 3);
   for (int i = 0; i < 8; ++i)
-    for (int j = 0; j < 3; ++j) expectedVertices(i, j) = expected_src[i][j];
-  EXPECT_TRUE(model.GetObject().vertices == expectedVertices);
+    for (int j = 0; j < 3; ++j) expected_vertices(i, j) = expected_src[i][j];
+  EXPECT_TRUE(model.GetObject().vertices == expected_vertices);
 }
 
 TEST_F(ModelTest, Transform_Scale) {
@@ -59,10 +67,10 @@ TEST_F(ModelTest, Transform_Scale) {
       {2.0, -2.0, -2.0},  {2.0, -2.0, 2.0}, {-2.0, -2.0, 2.0},
       {-2.0, -2.0, -2.0}, {2.0, 2.0, -2.0}, {2.0, 2.0, 2.0},
       {-2.0, 2.0, 2.0},   {-2.0, 2.0, -2.0}};
-  Matrix expectedVertices(8, 3);
+  Matrix expected_vertices(8, 3);
   for (int i = 0; i < 8; ++i)
-    for (int j = 0; j < 3; ++j) expectedVertices(i, j) = expected_src[i][j];
-  EXPECT_TRUE(model.GetObject().vertices == expectedVertices);
+    for (int j = 0; j < 3; ++j) expected_vertices(i, j) = expected_src[i][j];
+  EXPECT_TRUE(model.GetObject().vertices == expected_vertices);
 }
 
 TEST_F(ModelTest, Transform_RotateX) {
@@ -70,10 +78,10 @@ TEST_F(ModelTest, Transform_RotateX) {
   std::vector<std::vector<double>> expected_src = {
       {1, 1, -1}, {1, -1, -1}, {-1, -1, -1}, {-1, 1, -1},
       {1, 1, 1},  {1, -1, 1},  {-1, -1, 1},  {-1, 1, 1}};
-  Matrix expectedVertices(8, 3);
+  Matrix expected_vertices(8, 3);
   for (int i = 0; i < 8; ++i)
-    for (int j = 0; j < 3; ++j) expectedVertices(i, j) = expected_src[i][j];
-  EXPECT_TRUE(model.GetObject().vertices == expectedVertices);
+    for (int j = 0; j < 3; ++j) expected_vertices(i, j) = expected_src[i][j];
+  EXPECT_TRUE(model.GetObject().vertices == expected_vertices);
 }
 
 TEST_F(ModelTest, Transform_RotateY) {
@@ -82,10 +90,10 @@ TEST_F(ModelTest, Transform_RotateY) {
       {-1.0, -1.0, -1.0}, {1.0, -1.0, -1.0}, {1.0, -1.0, 1.0},
       {-1.0, -1.0, 1.0},  {-1, 1, -1},       {1, 1, -1},
       {1, 1, 1},          {-1, 1, 1}};
-  Matrix expectedVertices(8, 3);
+  Matrix expected_vertices(8, 3);
   for (int i = 0; i < 8; ++i)
-    for (int j = 0; j < 3; ++j) expectedVertices(i, j) = expected_src[i][j];
-  EXPECT_TRUE(model.GetObject().vertices == expectedVertices);
+    for (int j = 0; j < 3; ++j) expected_vertices(i, j) = expected_src[i][j];
+  EXPECT_TRUE(model.GetObject().vertices == expected_vertices);
 }
 
 TEST_F(ModelTest, Transform_RotateZ) {
@@ -93,10 +101,10 @@ TEST_F(ModelTest, Transform_RotateZ) {
   std::vector<std::vector<double>> expected_src = {
       {1, 1, -1},  {1, 1, 1},  {1, -1, 1},  {1, -1, -1},
       {-1, 1, -1}, {-1, 1, 1}, {-1, -1, 1}, {-1, -1, -1}};
-  Matrix expectedVertices(8, 3);
+  Matrix expected_vertices(8, 3);
   for (int i = 0; i < 8; ++i)
-    for (int j = 0; j < 3; ++j) expectedVertices(i, j) = expected_src[i][j];
-  EXPECT_TRUE(model.GetObject().vertices == expectedVertices);
+    for (int j = 0; j < 3; ++j) expected_vertices(i, j) = expected_src[i][j];
+  EXPECT_TRUE(model.GetObject().vertices == expected_vertices);
 }
 
 // Тест для метода GetFaceSize
@@ -113,11 +121,11 @@ TEST_F(ModelTest, GetFaceSize) {
 
 // Тест для метода ToNormal
 TEST_F(ModelTest, ToNormal) {
-  Matrix expectedVertices = model.GetObject().vertices;
+  Matrix expected_vertices = model.GetObject().vertices;
   model.Transform(3, 2.0);  // Масштабируем на 2
   model.ToNormal();
   Matrix vertices = model.GetObject().vertices;
-  EXPECT_TRUE(vertices == expectedVertices);
+  EXPECT_TRUE(vertices == expected_vertices);
   EXPECT_DOUBLE_EQ(model.GetScale(), 1.0);
 }
 
@@ -133,9 +141,9 @@ TEST_F(ModelTest, GetVertex) {
 
 // Тест для метода GetBufSize
 TEST_F(ModelTest, GetBufSize) {
-  auto buf = model.GetBufSize();
-  EXPECT_EQ(buf.first, 24);
-  EXPECT_EQ(buf.second, 108);
+  auto buf_size = model.GetBufSize();
+  EXPECT_EQ(buf_size.first, 24);
+  EXPECT_EQ(buf_size.second, 108);
 }
 
 // Тест для метода LoadBuffer

@@ -14,9 +14,10 @@ class Model {
   unsigned int edge_buf_size_ = 0;
   bool changed_ = false;
   bool obj_changed_ = false;
+  bool setted = false;
 
  public:
-  bool setted = false;
+  bool IsSetted() const noexcept;
   bool SetObject(const std::string& file_path);
   void Transform(int operation, double value);
   const std::string& GetFilePath() const;

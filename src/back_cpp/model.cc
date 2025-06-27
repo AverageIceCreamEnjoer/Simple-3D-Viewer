@@ -16,6 +16,8 @@ bool Model::SetObject(const std::string& filePath) {
   return setted;
 }
 
+bool Model::IsSetted() const noexcept { return setted; }
+
 void Model::Transform(int operation, double value) {
   switch (operation) {
     case 0:

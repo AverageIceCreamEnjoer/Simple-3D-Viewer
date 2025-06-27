@@ -10,7 +10,7 @@
 #include <QtWidgets>
 #include <fstream>
 
-#include "ctrl_c/controller.h"
+#include "controller/controller.h"
 #include "view/glview.h"
 
 namespace viewer {

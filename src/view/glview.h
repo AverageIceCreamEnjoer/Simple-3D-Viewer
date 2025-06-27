@@ -5,7 +5,7 @@
 #include <QtWidgets>
 #include <array>
 
-#include "../ctrl_c/controller.h"
+#include "../controller/controller.h"
 
 namespace viewer {
 /// @brief Describes the game selection menu
