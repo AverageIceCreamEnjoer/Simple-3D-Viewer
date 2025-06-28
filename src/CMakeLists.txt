@@ -18,7 +18,7 @@ set(PROJECT_SOURCES
     main.cc main.h
     view.cc view.h mainwindow.ui
     view/glview.cc view/glview.h
-    ctrl_c/controller.h ctrl_c/controller.cc
+    controller/controller.h controller/controller.cc
 )
 
 add_executable(simple_3d_viewer ${PROJECT_SOURCES})

@@ -2,8 +2,8 @@ RES_DIR = resources
 DOC_DIR = doc
 BUILD_DIR = build
 INSTALL_DIR = install
-CC := gcc
-CFLAGS := -std=c11 -Wall -Werror -Wextra
+CC := g++
+CFLAGS := -std=c++17 -Wall -Werror -Wextra
 PROJECT_NAME := C8_3DViewer_v1.0-2
 TEST_SRC = back_c/matrix_c/* back_c/*
 TEST_SOURCES = test/test.c $(TEST_SRC)
@@ -16,7 +16,7 @@ res:
 	mkdir -p $(RES_DIR)
 
 object.a: res
-	$(CC) $(CFLAGS) -c back_c/matrix_c/*.c back_c/*.c
+	$(CC) $(CFLAGS) -c back_cpp/*.cc back_cpp/matrix/*.cc
 	mv *.o $(RES_DIR)/
 	ar rcs object.a $(RES_DIR)/*.o
 	ranlib object.a
@@ -48,7 +48,7 @@ dist:
 	zip -r ../../$(PROJECT_NAME).zip ../../$(PROJECT_NAME)
 
 tests: clean object.a
-	$(CC) $(CFLAGS) test/test.c -L. $(RES_DIR)/object.a -o tests -lcheck -lm -lsubunit
+	$(CC) $(CFLAGS) test/*.cc -L. $(RES_DIR)/object.a -o tests -lgtest
 	./tests
 
 clang:

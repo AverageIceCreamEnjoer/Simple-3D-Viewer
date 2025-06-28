@@ -1,14 +1,12 @@
 #pragma once
-
 #include <string>
 
-extern "C" {
-#include "../back_c/model.h"
-}
+#include "../back_cpp/model.h"
+
 namespace viewer {
 class Controller {
  private:
-  Model* model_;
+  Model model_;
 
  public:
   /// @brief Default constructor
